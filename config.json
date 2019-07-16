@@ -1,0 +1,13 @@
+{
+  "jiraBaseUrl": "https://your.jira.instance",
+  "statuses": [
+    {
+      "name": "BACKLOG",
+      "jql": "status = 'Backlog'"
+    },
+    {
+      "name": "CLOSED",
+      "jql": "status = 'Closed'"
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+* {
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  color: white;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  -webkit-app-region: drag;
+  display: flex;
+}
+
+#app {
+  border-radius: 8px;
+  background-color: #0747a6;
+  padding: 6px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#jira-logo {
+  flex: 0 0 auto;
+  height: 55px;
+  margin: 0 16px 0 6px;
+}
+
+#statuses {
+  flex: 1 1 auto;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-end;
+}
+
+.status {
+  -webkit-app-region: no-drag;
+  cursor: pointer;
+  margin: 4px 0;
+  display: flex;
+  flex-direction: row;
+  align-items: baseline;
+}
+
+.status-name {
+  border-radius: 2px;
+  font-weight: 500;
+  padding: 2px 0 3px 28px;
+  font-size: 13px;
+}
+
+.status-name.highlight-status {
+  background-color: #FCC900;
+  color: black;
+  padding: 2px 14px 3px 14px;
+}
+
+.count {
+  width: 30px;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  margin: 0 8px;
+}
