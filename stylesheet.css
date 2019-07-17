@@ -27,7 +27,7 @@ body {
   margin: 0 16px 0 6px;
 }
 
-#statuses {
+#labels {
   flex: 1 1 auto;
   height: 100%;
   display: flex;
@@ -36,7 +36,7 @@ body {
   align-items: flex-end;
 }
 
-.status {
+.label {
   -webkit-app-region: no-drag;
   cursor: pointer;
   margin: 4px 0;
@@ -45,14 +45,14 @@ body {
   align-items: baseline;
 }
 
-.status-name {
+.label-name {
   border-radius: 2px;
   font-weight: 500;
   padding: 2px 0 3px 28px;
   font-size: 13px;
 }
 
-.status-name.highlight-status {
+.label-name.highlight-label {
   background-color: #FCC900;
   color: black;
   padding: 2px 14px 3px 14px;
@@ -64,4 +64,8 @@ body {
   font-size: 13px;
   font-weight: 500;
   margin: 0 8px;
+}
+
+#config-error {
+  margin: 0 16px 0 0;
 }

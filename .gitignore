@@ -86,3 +86,9 @@ typings/
 
 # DynamoDB Local files
 .dynamodb/
+
+# Builds
+/builds
+
+# User Config
+/config.json

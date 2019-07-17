@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>Jira Dashboard</title>
+  <title>JiraWidget</title>
   <link rel="stylesheet" href="stylesheet.css" />
   <link rel="stylesheet" href="https://cdn.materialdesignicons.com/3.2.89/css/materialdesignicons.min.css" />
 </head>
@@ -12,19 +12,22 @@
     <!-- Logo -->
     <img id="jira-logo" src="./assets/jira.png" alt="Jira logo" />
 
-    <!-- Statuses -->
-    <div id="statuses">
+    <!-- Config Error -->
+    <div id="config-error" v-if="jiraBaseUrl == null || labels == null">
+      <p>Config error, see the docs.</p>
+    </div>
 
-      <status v-for="status in statuses" :name="status.name" :jql="status.jql" class="status" :key="status.name"
-        inline-template>
+    <!-- Labels -->
+    <div id="labels" v-else>
+      <label-count v-for="label in labels" :name="label.name" :jql="label.jql" class="label" :key="label.name"
+        :jira-base-url="jiraBaseUrl" inline-template>
         <div @click="openJiraSearch">
-          <span class="status-name" :class="{'highlight-status': count > 0}">{{ name }}</span>
+          <span class="label-name" :class="{'highlight-label': count > 0}">{{ name }}</span>
           <div class="count" v-show="this.updatingCount == false">{{ count }}</div>
           <span class="count mdi mdi-loading mdi-spin" v-show="this.updatingCount == true"></span>
         </div>
-      </status>
+      </label-count>
     </div>
-
   </div>
 
   <script src="./node_modules/vue/dist/vue.js"></script>
