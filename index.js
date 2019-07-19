@@ -2,10 +2,23 @@ const { ipcRenderer, shell } = require('electron')
 const $ = window.require("jquery");
 const fs = window.require('fs');
 
+function resizeApp() {
+  let $app = $('#app');
+  let appWidth = Math.ceil($app.outerWidth());
+  let appHeight = Math.ceil($app.outerHeight());
+  ipcRenderer.send('resize', appWidth, appHeight);
+}
+
 $(function () {
-  // Close the app if the escape key is pressed.
-  $(document).bind("keyup", "esc", function () {
-    ipcRenderer.send('quit');
+  $(document).bind('keyup', function (e) {
+    // Resize the app if the "r" key is pressed.
+    if (e.code == 'KeyR') {
+      resizeApp();
+    }
+    // Close the app if the escape key is pressed.
+    else if (e.code == 'Escape') {
+      ipcRenderer.send('quit');
+    }
   });
 });
 
@@ -23,7 +36,7 @@ Vue.component("label-count", {
     };
   },
   computed: {
-    jqlEncoded: function() {
+    jqlEncoded: function () {
       return escape(this.jql);
     }
   },
@@ -31,21 +44,21 @@ Vue.component("label-count", {
     openJiraSearch: function () {
       shell.openExternal(this.jiraBaseUrl + '/issues/?jql=' + this.jqlEncoded);
     },
-    updateCount: function() {
+    updateCount: function () {
       var parent = this;
 
-      var showSpinner = setTimeout(function() {
+      var showSpinner = setTimeout(function () {
         parent.updatingCount = true;
       }, 1000);
 
-      $.getJSON(this.jiraBaseUrl + '/rest/api/2/search?jql=' + this.jqlEncoded, function(result) {
+      $.getJSON(this.jiraBaseUrl + '/rest/api/2/search?jql=' + this.jqlEncoded, function (result) {
         parent.count = result.total;
         clearTimeout(showSpinner);
         parent.updatingCount = false;
       });
     }
   },
-  created: function() {
+  created: function () {
     this.updateCount();
     this.timer = setInterval(this.updateCount, 60000);
   }
@@ -57,15 +70,7 @@ var vm = new Vue({
     jiraBaseUrl: null,
     labels: null
   },
-  methods: {
-    resizeApp: function() {
-      let $app = $('#app');
-      let appWidth = Math.ceil($app.outerWidth());
-      let appHeight = Math.ceil($app.outerHeight());
-      ipcRenderer.send('resize', appWidth, appHeight);
-    }
-  },
-  created: function() {
+  created: function () {
     // Load the configuration
     try {
       let config = JSON.parse(fs.readFileSync("config.json"));
@@ -75,7 +80,7 @@ var vm = new Vue({
       // Do nothing.
     }
   },
-  mounted: function() {
-    this.resizeApp();
+  mounted: function () {
+    resizeApp();
   }
 });
