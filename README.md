@@ -21,7 +21,7 @@ The example above shows 2 configured counts but you can configure as many as you
 
 ### Windows
 
-Navigate to the Releases area of this repo to download the latest executable.
+Navigate to the [Releases](https://github.com/Dullage/JiraWidget/releases) area of this repo to download the latest executable.
 
 ## Configuration
 
