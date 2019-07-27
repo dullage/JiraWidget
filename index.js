@@ -3,20 +3,22 @@ const $ = window.require("jquery");
 const fs = window.require('fs');
 
 function resizeApp() {
+  // Turn off auto resizing whilst we resize
+  $(window).off('resize')
+
   let $app = $('#app');
   let appWidth = Math.ceil($app.outerWidth());
   let appHeight = Math.ceil($app.outerHeight());
   ipcRenderer.send('resize', appWidth, appHeight);
+
+  // Auto resize the app if the viewport changes (e.g. when switching resolutions)
+  $(window).on('resize', resizeApp)
 }
 
 $(function () {
   $(document).bind('keyup', function (e) {
-    // Resize the app if the "r" key is pressed.
-    if (e.code == 'KeyR') {
-      resizeApp();
-    }
     // Close the app if the escape key is pressed.
-    else if (e.code == 'Escape') {
+    if (e.code == 'Escape') {
       ipcRenderer.send('quit');
     }
   });

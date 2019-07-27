@@ -15,7 +15,6 @@ The example above shows 2 configured counts but you can configure as many as you
 * Clicking on a label/count will open a Jira search (in the default browser) listing the issues.
 * The widget will always stay on top of other windows.
 * The Jira instance must allow at least anonymous read only access. There is currently no option to configure credentials.
-* Sometimes when the screen resolution changes the electron app resizes adding scrollbars. Focusing on the app and pressing the "r" key will reset the app to fit properly if this happens.
 
 ## Installation
 
