@@ -15,6 +15,8 @@ The example above shows 2 configured counts but you can configure as many as you
 * Clicking on a label/count will open a Jira search (in the default browser) listing the issues.
 * The widget will always stay on top of other windows.
 * The Jira instance must allow at least anonymous read only access. There is currently no option to configure credentials.
+* By default labels with a 0 count will be shown but they can be optionally hidden with `"hideWhenZero": true`.
+* As labels are shown/hidden the app will resize. By default this will be anchored to the top left of the app but this can be changed with `anchorBottom` and `anchorRight`.
 
 ## Installation
 
@@ -29,14 +31,24 @@ In the same directory as "JiraWidget.exe" add a file called "config.json". Open 
 ```json
 {
   "jiraBaseUrl": "https://your.jira.instance",
+  "anchorBottom": true,
+  "anchorRight": true,
   "labels": [
     {
       "name": "TO DO",
-      "jql": "assignee = 'adamd' and status = 'To Do'"
+      "jql": "assignee = 'adamd' and status = 'To Do'",
+      "hideWhenZero": false
+    },
+    {
+      "name": "IN PROGRESS",
+      "jql": "assignee = 'adamd' and status = 'In Progress'",
+      "hideWhenZero": true
+    },
+    {
+      "name": "DONE",
+      "jql": "assignee = 'adamd' and status = 'Done'",
+      "hideWhenZero": false
     }
   ]
 }
-
 ```
-
-*Note: You can add as many labels as you like just remember to separate them with a comma.*
