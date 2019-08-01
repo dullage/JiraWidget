@@ -13,15 +13,15 @@
     <img id="jira-logo" src="./assets/jira.png" alt="Jira logo" />
 
     <!-- Config Error -->
-    <div id="config-error" v-if="jiraBaseUrl == null || labels == null">
-      <p>Config error, see the docs.</p>
+    <div id="config-error" v-if="configErrors.length > 0">
+      <p v-for="error in configErrors">{{ error }}</p>
     </div>
 
     <!-- Labels -->
     <div id="labels" v-else>
-      <label-count v-for="label in labels" :name="label.name" :jql="label.jql" class="label" :key="label.name"
-        :jira-base-url="jiraBaseUrl" inline-template>
-        <div @click="openJiraSearch">
+      <label-count v-for="label in config.labels" :name="label.name" :jql="label.jql" class="label" :key="label.name"
+        :jira-base-url="config.jiraBaseUrl" :hide-when-zero="label.hideWhenZero" inline-template>
+        <div @click="openJiraSearch" v-show="hideWhenZero == false || count > 0">
           <span class="label-name" :class="{'highlight-label': count > 0}">{{ name }}</span>
           <div class="count" v-show="this.updatingCount == false">{{ count }}</div>
           <span class="count mdi mdi-loading mdi-spin" v-show="this.updatingCount == true"></span>

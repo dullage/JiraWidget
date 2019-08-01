@@ -14,13 +14,38 @@ function createWindow() {
 
   win.loadFile("index.html");
   
-  ipcMain.on('resize', function(e, x, y) {
-    win.setSize(x, y);
+  ipcMain.on('resize', function(e, targetSizeX, targetSizeY, anchorRight, anchorBottom) {
+    if (anchorRight == true || anchorBottom == true) {
+      var targetPosX;
+      var targetPosY;
+      var [originalPosX, originalPosY] = win.getPosition();
+      var [originalSizeX, originalSizeY] = win.getSize();
+
+      if (anchorRight == true) {
+        targetPosX = originalPosX + (originalSizeX - targetSizeX);
+      }
+      else {
+        targetPosX = originalPosX;
+      }
+
+      if (anchorBottom == true) {
+        targetPosY = originalPosY + (originalSizeY - targetSizeY);
+      }
+      else {
+        targetPosY = originalPosY;
+      }
+      win.setPosition(targetPosX, targetPosY);
+    }
+
+    win.setContentSize(targetSizeX, targetSizeY);
   })
 
   ipcMain.on('quit', function() {
     app.quit();
   })
+
+  // Open dev tools in separate window.
+  // win.webContents.openDevTools({mode:'undocked'});
 }
 
 app.on("ready", createWindow);

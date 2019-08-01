@@ -1,19 +1,18 @@
 const { ipcRenderer, shell } = require('electron')
 const $ = window.require("jquery");
 const fs = window.require('fs');
+const joi = window.require('@hapi/joi');
 
-function resizeApp() {
-  // Turn off auto resizing whilst we resize
-  $(window).off('resize')
-
-  let $app = $('#app');
-  let appWidth = Math.ceil($app.outerWidth());
-  let appHeight = Math.ceil($app.outerHeight());
-  ipcRenderer.send('resize', appWidth, appHeight);
-
-  // Auto resize the app if the viewport changes (e.g. when switching resolutions)
-  $(window).on('resize', resizeApp)
-}
+const configSchema = joi.object().keys({
+  jiraBaseUrl: joi.string().uri().required(),
+  labels: joi.array().items(joi.object().keys({
+    name: joi.string().min(1).required(),
+    jql: joi.string().min(1).required(),
+    hideWhenZero: joi.boolean()
+  })).min(1).required(),
+  anchorRight: joi.boolean(),
+  anchorBottom: joi.boolean()
+}).required()
 
 $(function () {
   $(document).bind('keyup', function (e) {
@@ -26,8 +25,12 @@ $(function () {
 
 Vue.component("label-count", {
   props: {
-    name: String,
     jql: String,
+    name: String,
+    hideWhenZero: {
+      type: Boolean,
+      default: false
+    },
     jiraBaseUrl: String
   },
   data: function () {
@@ -51,12 +54,15 @@ Vue.component("label-count", {
 
       var showSpinner = setTimeout(function () {
         parent.updatingCount = true;
-      }, 1000);
+      }, 3000);
 
       $.getJSON(this.jiraBaseUrl + '/rest/api/2/search?jql=' + this.jqlEncoded, function (result) {
         parent.count = result.total;
         clearTimeout(showSpinner);
         parent.updatingCount = false;
+
+        // Resize the app as some of the labels might now be hidden / shown
+        parent.$parent.resizeApp();
       });
     }
   },
@@ -69,20 +75,42 @@ Vue.component("label-count", {
 var vm = new Vue({
   el: "#app",
   data: {
-    jiraBaseUrl: null,
-    labels: null
+    config: null,
+    configErrors: []
+  },
+  methods: {
+    resizeApp: function () {
+      // Turn off auto resizing whilst we resize
+      $(window).off('resize')
+
+      let $app = $('#app');
+      let appWidth = Math.ceil($app.outerWidth());
+      let appHeight = Math.ceil($app.outerHeight());
+      ipcRenderer.send('resize', appWidth, appHeight, this.config.anchorRight, this.config.anchorBottom);
+
+      // Auto resize the app if the viewport changes (e.g. when switching resolutions)
+      $(window).on('resize', this.resizeApp)
+    }
   },
   created: function () {
     // Load the configuration
+    var parsedConfig;
     try {
-      let config = JSON.parse(fs.readFileSync("config.json"));
-      this.labels = config.labels;
-      this.jiraBaseUrl = config.jiraBaseUrl;
+      parsedConfig = JSON.parse(fs.readFileSync("config.json"));
     } catch {
-      // Do nothing.
+      this.configErrors.push('Unable to load config file. See the docs.');
+      return;
     }
+    var parent = this;
+    configSchema.validate(parsedConfig, function (error) {
+      if (error != null) {
+        parent.configErrors.push(error);
+      }
+    })
+
+    this.config = parsedConfig;
   },
   mounted: function () {
-    resizeApp();
+    this.resizeApp();
   }
 });

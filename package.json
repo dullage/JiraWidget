@@ -2,9 +2,10 @@
   "name": "jira-widget",
   "productName": "JiraWidget",
   "description": "A simple desktop widget for displaying Jira issue counts.",
-  "version": "19.7.27",
+  "version": "19.8.1",
   "main": "main.js",
   "dependencies": {
+    "@hapi/joi": "^15.1.0",
     "electron-compile": "^6.4.4",
     "electron-squirrel-startup": "^1.0.0",
     "jquery": "^3.4.1",
@@ -17,7 +18,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron .",
-    "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/win-icon.ico --prune=true --out=builds",
+    "package-win": "electron-packager . --overwrite --asar --platform=win32 --arch=ia32 --icon=assets/win-icon.ico --prune=true --out=builds",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=assets/mac-icon.icns --prune=true --out=builds"
   },
   "author": "Adam Dullage",
