@@ -25,7 +25,6 @@ body {
 #jira-logo {
   flex: 0 0 auto;
   height: 55px;
-  margin: 0 16px 0 6px;
 }
 
 #labels {
@@ -40,7 +39,7 @@ body {
 .label {
   -webkit-app-region: no-drag;
   cursor: pointer;
-  margin: 4px 0;
+  margin: 4px 0 4px 8px;
   display: flex;
   flex-direction: row;
   align-items: baseline;
