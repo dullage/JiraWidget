@@ -39,7 +39,7 @@ body {
 .label {
   -webkit-app-region: no-drag;
   cursor: pointer;
-  margin: 4px 0 4px 8px;
+  margin: 4px 0 4px 16px;
   display: flex;
   flex-direction: row;
   align-items: baseline;
@@ -64,7 +64,7 @@ body {
   text-align: center;
   font-size: 13px;
   font-weight: 500;
-  margin: 0 8px;
+  margin: 0 6px;
 }
 
 #config-error {
