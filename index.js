@@ -2,6 +2,7 @@ const { ipcRenderer, shell } = require("electron");
 const $ = window.require("jquery");
 const fs = window.require("fs");
 const joi = window.require("@hapi/joi");
+const axios = window.require("axios");
 
 const configSchema = joi
   .object()
@@ -74,15 +75,20 @@ Vue.component("label-count", {
         parent.updatingCount = true;
       }, 3000);
 
-      $.getJSON(
-        this.jiraBaseUrl + "/rest/api/2/search?jql=" + this.jqlEncoded,
-        function(result) {
-          parent.count = result.total;
+      axios
+        .get(this.jiraBaseUrl + "/rest/api/2/search?jql=" + this.jqlEncoded)
+        .then(function(response) {
+          if (parent.count != response.data.total) {
+            parent.count = response.data.total;
+            parent.$emit("count-updated");
+          }
           clearTimeout(showSpinner);
           parent.updatingCount = false;
-          parent.$emit("count-updated");
-        }
-      );
+        })
+        .catch(function(error) {
+          console.log(error.response);
+          // .data.errorMessages
+        });
     }
   },
   created: function() {
@@ -101,6 +107,7 @@ var vm = new Vue({
   methods: {
     startResizeTimer: function() {
       parent = this;
+      clearTimeout(this.resizeTimer);
       this.resizeTimer = setTimeout(function() {
         parent.resizeApp();
       }, 200);
@@ -135,5 +142,8 @@ var vm = new Vue({
     });
 
     this.config = parsedConfig;
+
+    // Auto resize the app if the viewport changes (e.g. when switching resolutions)
+    $(window).on("resize", this.startResizeTimer);
   }
 });
