@@ -2,7 +2,7 @@
   "name": "jira-widget",
   "productName": "JiraWidget",
   "description": "A simple desktop widget for displaying Jira issue counts.",
-  "version": "19.8.1",
+  "version": "20.4.7",
   "main": "main.js",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
