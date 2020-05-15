@@ -7,11 +7,11 @@
   "dependencies": {
     "@hapi/joi": "^17.1.1",
     "axios": "^0.19.2",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.1",
     "vue": "^2.6.11"
   },
   "devDependencies": {
-    "electron": "^8.2.1",
+    "electron": "^8.2.5",
     "electron-compile": "^6.4.4",
     "electron-packager": "^14.2.1",
     "electron-squirrel-startup": "^1.0.0"
