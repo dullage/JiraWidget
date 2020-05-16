@@ -6,7 +6,6 @@ pipeline {
                 dockerfile {
                     label 'amd64'
                     dir '.jenkins'
-                    args '-v /etc/passwd:/etc/passwd:ro'
                 }
             }
             steps {
