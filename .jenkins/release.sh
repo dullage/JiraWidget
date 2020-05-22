@@ -3,6 +3,7 @@
 set -e
 
 asset=$WORKSPACE/builds/JiraWidget-win32-ia32/JiraWidget.zip
+asset_name=JiraWidget.zip
 tag=v$(cat $WORKSPACE/package.json | jq -r ".version")
 
 printf "Creating Release...\n"
@@ -22,4 +23,4 @@ curl -fsS -o /dev/null \
   -H "Authorization: token $GITHUB_TOKEN" \
   -H "Content-Type: $(file -b --mime-type $asset)" \
   --data-binary @$asset \
-  $upload_url?name=$asset
+  $upload_url?name=$asset_name
