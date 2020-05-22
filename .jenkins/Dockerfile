@@ -6,6 +6,7 @@ RUN apt update && apt install -y \
     unzip \
     jq \
     curl \
+    file \
  && rm -rf /var/lib/apt/lists/*
 
 ENTRYPOINT /bin/bash
