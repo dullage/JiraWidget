@@ -17,7 +17,7 @@ pipeline {
         stage('Release') {
             when { branch 'master' }
             environment {
-                GIT_REPO_SLUG = 'Dullage/tahskr-server'
+                GIT_REPO_SLUG = 'Dullage/JiraWidget'
                 GITHUB_TOKEN = credentials('github_token')
             }
             steps {
