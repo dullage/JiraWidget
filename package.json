@@ -2,18 +2,18 @@
   "name": "jira-widget",
   "productName": "JiraWidget",
   "description": "A simple desktop widget for displaying Jira issue counts.",
-  "version": "20.8.3",
+  "version": "22.7.11",
   "main": "main.js",
   "dependencies": {
     "@hapi/joi": "^17.1.1",
-    "axios": "^0.19.2",
-    "jquery": "^3.5.1",
-    "vue": "^2.6.11"
+    "axios": "^0.27.2",
+    "jquery": "^3.6.0",
+    "vue": "^2.7.4"
   },
   "devDependencies": {
-    "electron": "^9.1.2",
+    "electron": "^19.0.8",
     "electron-compile": "^6.4.4",
-    "electron-packager": "^15.0.0",
+    "electron-packager": "^15.5.1",
     "electron-squirrel-startup": "^1.0.0"
   },
   "scripts": {

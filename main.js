@@ -8,7 +8,8 @@ function createWindow() {
     skipTaskbar: true,
     opacity: 0.8,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      contextIsolation: false
     }
   });
 
