@@ -7,34 +7,25 @@ const axios = window.require("axios");
 const configSchema = joi
   .object()
   .keys({
-    jiraBaseUrl: joi
-      .string()
-      .uri()
-      .required(),
+    jiraBaseUrl: joi.string().uri().required(),
     labels: joi
       .array()
       .items(
         joi.object().keys({
-          name: joi
-            .string()
-            .min(1)
-            .required(),
-          jql: joi
-            .string()
-            .min(1)
-            .required(),
-          hideWhenZero: joi.boolean()
+          name: joi.string().min(1).required(),
+          jql: joi.string().min(1).required(),
+          hideWhenZero: joi.boolean(),
         })
       )
       .min(1)
       .required(),
     anchorRight: joi.boolean(),
-    anchorBottom: joi.boolean()
+    anchorBottom: joi.boolean(),
   })
   .required();
 
-$(function() {
-  $(document).bind("keyup", function(e) {
+$(function () {
+  $(document).bind("keyup", function (e) {
     // Close the app if the escape key is pressed.
     if (e.code == "Escape") {
       ipcRenderer.send("quit");
@@ -48,36 +39,36 @@ Vue.component("label-count", {
     name: String,
     hideWhenZero: {
       type: Boolean,
-      default: false
+      default: false,
     },
-    jiraBaseUrl: String
+    jiraBaseUrl: String,
   },
-  data: function() {
+  data: function () {
     return {
       count: null,
       timer: null,
-      updatingCount: true
+      updatingCount: true,
     };
   },
   computed: {
-    jqlEncoded: function() {
+    jqlEncoded: function () {
       return escape(this.jql);
-    }
+    },
   },
   methods: {
-    openJiraSearch: function() {
+    openJiraSearch: function () {
       shell.openExternal(this.jiraBaseUrl + "/issues/?jql=" + this.jqlEncoded);
     },
-    updateCount: function() {
+    updateCount: function () {
       var parent = this;
 
-      var showSpinner = setTimeout(function() {
+      var showSpinner = setTimeout(function () {
         parent.updatingCount = true;
       }, 3000);
 
       axios
         .get(this.jiraBaseUrl + "/rest/api/2/search?jql=" + this.jqlEncoded)
-        .then(function(response) {
+        .then(function (response) {
           if (parent.count != response.data.total) {
             parent.count = response.data.total;
             parent.$emit("count-updated");
@@ -85,16 +76,16 @@ Vue.component("label-count", {
           clearTimeout(showSpinner);
           parent.updatingCount = false;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error.response);
           // .data.errorMessages
         });
-    }
+    },
   },
-  created: function() {
+  created: function () {
     this.updateCount();
     this.timer = setInterval(this.updateCount, 60000);
-  }
+  },
 });
 
 var vm = new Vue({
@@ -102,17 +93,17 @@ var vm = new Vue({
   data: {
     config: null,
     configErrors: [],
-    resizeTimer: null
+    resizeTimer: null,
   },
   methods: {
-    startResizeTimer: function() {
+    startResizeTimer: function () {
       parent = this;
       clearTimeout(this.resizeTimer);
-      this.resizeTimer = setTimeout(function() {
+      this.resizeTimer = setTimeout(function () {
         parent.resizeApp();
       }, 200);
     },
-    resizeApp: function() {
+    resizeApp: function () {
       let $app = $("#app");
       let appWidth = Math.ceil($app.outerWidth());
       let appHeight = Math.ceil($app.outerHeight());
@@ -123,9 +114,9 @@ var vm = new Vue({
         this.config.anchorRight,
         this.config.anchorBottom
       );
-    }
+    },
   },
-  created: function() {
+  created: function () {
     // Load the configuration
     var parsedConfig;
     try {
@@ -135,7 +126,7 @@ var vm = new Vue({
       return;
     }
     var parent = this;
-    configSchema.validate(parsedConfig, function(error) {
+    configSchema.validate(parsedConfig, function (error) {
       if (error != null) {
         parent.configErrors.push(error);
       }
@@ -145,5 +136,5 @@ var vm = new Vue({
 
     // Auto resize the app if the viewport changes (e.g. when switching resolutions)
     $(window).on("resize", this.startResizeTimer);
-  }
+  },
 });
