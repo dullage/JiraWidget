@@ -8,6 +8,8 @@ const configSchema = joi
   .object()
   .keys({
     jiraBaseUrl: joi.string().uri().required(),
+    username: joi.string(),
+    password: joi.string(),
     labels: joi
       .array()
       .items(
@@ -35,14 +37,17 @@ $(function () {
 
 Vue.component("label-count", {
   props: {
-    jql: String,
+    jiraBaseUrl: String,
+    username: String,
+    password: String,
     name: String,
+    jql: String,
     hideWhenZero: {
       type: Boolean,
       default: false,
     },
-    jiraBaseUrl: String,
   },
+
   data: function () {
     return {
       count: null,
@@ -50,15 +55,29 @@ Vue.component("label-count", {
       updatingCount: true,
     };
   },
+
   computed: {
     jqlEncoded: function () {
-      return escape(this.jql);
+      return encodeURIComponent(this.jql);
+    },
+
+    authConfig: function () {
+      if (this.username != null && this.password != null) {
+        return {
+          username: this.username,
+          password: this.password,
+        };
+      } else {
+        return null;
+      }
     },
   },
+
   methods: {
     openJiraSearch: function () {
       shell.openExternal(this.jiraBaseUrl + "/issues/?jql=" + this.jqlEncoded);
     },
+
     updateCount: function () {
       var parent = this;
 
@@ -67,7 +86,9 @@ Vue.component("label-count", {
       }, 3000);
 
       axios
-        .get(this.jiraBaseUrl + "/rest/api/2/search?jql=" + this.jqlEncoded)
+        .get(this.jiraBaseUrl + "/rest/api/2/search?jql=" + this.jqlEncoded, {
+          auth: this.authConfig,
+        })
         .then(function (response) {
           if (parent.count != response.data.total) {
             parent.count = response.data.total;
@@ -82,6 +103,7 @@ Vue.component("label-count", {
         });
     },
   },
+
   created: function () {
     this.updateCount();
     this.timer = setInterval(this.updateCount, 60000);
@@ -90,11 +112,13 @@ Vue.component("label-count", {
 
 var vm = new Vue({
   el: "#app",
+
   data: {
     config: null,
     configErrors: [],
     resizeTimer: null,
   },
+
   methods: {
     startResizeTimer: function () {
       parent = this;
@@ -116,6 +140,7 @@ var vm = new Vue({
       );
     },
   },
+
   created: function () {
     // Load the configuration
     var parsedConfig;

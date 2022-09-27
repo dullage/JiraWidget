@@ -20,8 +20,8 @@
     <!-- Labels -->
     <div id="labels" v-else>
       <label-count v-for="label in config.labels" :name="label.name" :jql="label.jql" class="label" :key="label.name"
-        :jira-base-url="config.jiraBaseUrl" :hide-when-zero="label.hideWhenZero" @count-updated="startResizeTimer"
-        inline-template>
+        :jira-base-url="config.jiraBaseUrl" :username="config.username" :password="config.password"
+        :hide-when-zero="label.hideWhenZero" @count-updated="startResizeTimer" inline-template>
         <div @click="openJiraSearch" v-show="hideWhenZero == false || count > 0">
           <span class="label-name" :class="{'highlight-label': count > 0}">{{ name }}</span>
           <div class="count" v-show="this.updatingCount == false">{{ count }}</div>
