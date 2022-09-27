@@ -3,7 +3,7 @@
 
 # JiraWidget
 
-A simple desktop widget for displaying Jira issue counts. Integrates with Jira Server.
+A simple desktop widget for displaying Jira issue counts. Integrates with Jira Server and Jira Cloud.
 
 ![Screenshot](docs/screenshot.png)
 
@@ -14,9 +14,10 @@ The example above shows 2 configured counts but you can configure as many as you
 * The counts are refreshed once per minute.
 * Clicking on a label/count will open a Jira search (in the default browser) listing the issues.
 * The widget will always stay on top of other windows.
-* The Jira instance must allow at least anonymous read only access. There is currently no option to configure credentials.
 * By default labels with a 0 count will be shown but they can be optionally hidden with `"hideWhenZero": true`.
 * As labels are shown/hidden the app will resize. By default this will be anchored to the top left of the app but this can be changed with `anchorBottom` and `anchorRight`.
+* `username` and `password` are optional and may be omitted if target issues are publicly accessible.
+* When using Jira Cloud, you'll need to generate an API token and use that as the password.
 
 ## Installation
 
@@ -31,6 +32,8 @@ In the same directory as "JiraWidget.exe" add a file called "config.json". Open 
 ```json
 {
   "jiraBaseUrl": "https://your.jira.instance",
+  "username": "john.smith@example.com",
+  "password": "yourPassword!",
   "anchorBottom": true,
   "anchorRight": true,
   "labels": [
