@@ -3,6 +3,8 @@ const $ = window.require("jquery");
 const fs = window.require("fs");
 const joi = window.require("@hapi/joi");
 const axios = window.require("axios");
+const os = require("os");
+const path = require("path");
 
 const configSchema = joi
   .object()
@@ -145,7 +147,7 @@ var vm = new Vue({
     // Load the configuration
     var parsedConfig;
     try {
-      parsedConfig = JSON.parse(fs.readFileSync("config.json"));
+      parsedConfig = JSON.parse(fs.readFileSync(path.join(os.homedir(), ".jira-widget.json")));
     } catch {
       this.configErrors.push("Unable to load config file. See the docs.");
       return;

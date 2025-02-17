@@ -26,7 +26,7 @@ Navigate to the [Releases](https://github.com/Dullage/JiraWidget/releases) area 
 
 ## Configuration
 
-In the same directory as "JiraWidget.exe" add a file called "config.json". Open this file and paste in the template below changing the values as required:
+In your user/home directory, add a file called ".jira-widget.json". Open this file and paste in the template below changing the values as required:
 
 ```json
 {
